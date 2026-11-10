@@ -47,7 +47,10 @@ public class SegurancaConfig {
                 .cors(cors -> cors.configurationSource(regrasDeCors()))
                 // O cookie de sessão usa SameSite=Lax, que já bloqueia pedidos vindos de outros sites.
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(rotas -> rotas.anyRequest().authenticated())
+                .authorizeHttpRequests(rotas -> rotas
+                        // Liberada para o erro de verdade aparecer, em vez de um 401 escondendo a causa.
+                        .requestMatchers("/error").permitAll()
+                        .anyRequest().authenticated())
                 // Quem não está logado recebe 401 em vez de ser redirecionado: o front decide o que mostrar.
                 .exceptionHandling(erros -> erros
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
