@@ -56,8 +56,21 @@ Os tokens do Keycloak ficam só na API e nunca chegam ao navegador.
 | GET    | `/oauth2/authorization/keycloak` | Abre a tela de login do Keycloak (`?cadastro=true`: criar conta)    |
 | GET    | `/auth/eu`                       | Devolve `id`, `nome` e `email` de quem está logado (401 se ninguém) |
 | GET    | `/auth/sair`                     | Encerra o login na API e no Keycloak e volta para o site            |
+| GET    | `/vagas`                         | Lista as vagas, sem precisar de login (`?busca=texto` filtra pelo título) |
+| GET    | `/vagas/{id}`                    | Devolve uma vaga (404 se não existe)                                |
 
 As duas primeiras e a de sair são criadas pelo Spring Security; só `/auth/eu` está no nosso controller.
+
+## Vagas (Jooble)
+
+As vagas vêm do **Jooble**, um site que junta vagas de vários outros. A API busca vagas home office ao subir
+e depois a cada 6 horas, e guarda tudo **na memória** (some ao reiniciar e volta na próxima busca).
+
+- Peça a chave em https://jooble.org/api/about e rode uma vez `setx JOOBLE_API_KEY "sua-chave"`, depois reabra o terminal.
+- Sem a chave, a API sobe normalmente e `/vagas` devolve uma lista vazia.
+- Palavras buscadas, local e intervalo ficam no `application.properties`.
+- **Avast:** se o log mostrar `PKIX path building failed`, suba a API assim:
+  `./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-Djavax.net.ssl.trustStoreType=Windows-ROOT"`
 
 ## Estrutura
 
