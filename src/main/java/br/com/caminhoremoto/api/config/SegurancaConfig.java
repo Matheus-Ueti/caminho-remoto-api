@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -48,6 +49,8 @@ public class SegurancaConfig {
                 // O cookie de sessão usa SameSite=Lax, que já bloqueia pedidos vindos de outros sites.
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(rotas -> rotas
+                        // Vagas são públicas: quem chega pelo YouTube vê as vagas antes de criar conta.
+                        .requestMatchers(HttpMethod.GET, "/vagas/**").permitAll()
                         // Liberada para o erro de verdade aparecer, em vez de um 401 escondendo a causa.
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())
