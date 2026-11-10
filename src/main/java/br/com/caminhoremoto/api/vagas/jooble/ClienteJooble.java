@@ -45,7 +45,8 @@ public class ClienteJooble {
     private static Vaga converter(VagaDoJooble vaga) {
         // O resumo vem com marcações de HTML (<b>, &nbsp;) que o site mostraria como texto.
         String resumo = vaga.snippet().replaceAll("<[^>]*>", "").replace("&nbsp;", " ").trim();
-        return new Vaga("jooble-" + vaga.id(), vaga.title(), vaga.company(), vaga.location(),
+        String empresa = vaga.company() == null ? "Empresa não informada" : vaga.company();
+        return new Vaga("jooble-" + vaga.id(), vaga.title(), empresa, vaga.location(),
                 vaga.salary(), resumo, vaga.link(), vaga.updated());
     }
 
